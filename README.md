@@ -1,4 +1,4 @@
 # quizmaster1
-appdep1 project of iitm bs degree
-git clone is successful now
-lets get started
+1) appdep1 project of iitm bs degree
+2) git clone is successful now
+3) lets get started
