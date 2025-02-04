@@ -1,0 +1,27 @@
+.panel {
+background-color: antiquewhite;
+margin: auto;
+padding: auto;
+width: auto;
+text-align: center;
+border: 2px;
+
+}
+.container{
+    height: auto;
+    margin: auto; 
+    width: 80%;
+    border: 1px solid blue;
+}
+
+.form{
+    border: 1px solid blue;
+    width: 600px;
+    height: 500px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: justify;
+}
