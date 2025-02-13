@@ -50,7 +50,7 @@ class Quiz(db.Model):
     id=db.Column(db.Integer, primary_key=True, autoincrement=True)
     Chapter_id=db.Column(db.Integer, db.ForeignKey('Chapter.id'))
     score=db.Column(db.Integer, nullable=False)
-    date=db.Column(db.Date, nullable=False)
+    date=db.Column(db.DateTime, nullable=False)
     time_duration=db.Column(db.Float, nullable=False)
     remark=db.Column(db.String(100))
     Score=db.relationship('Score', backref="Quiz")
