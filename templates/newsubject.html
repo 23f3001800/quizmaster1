@@ -12,18 +12,18 @@
         <div class="panel">
             <h2>welcome to quizmaster</h2>
             <div class="my_form">
-              <form action="POST">
+              <form action="new_subject" method="POST">
                 <div class="mb-3">
                   <label for="newsubject" class="form-label">new subject</label>
-                  <input type="email" class="form-control" id="newsubject" placeholder="name@example.com">
+                  <input type="email" class="form-control" id="newsubject" name="new_subject">
                 </div>
                 <div class="mb-3">
                   <label for="description" class="form-label">description</label>
-                  <textarea class="form-control" id="desc" rows="3"></textarea>
+                  <textarea class="form-control" id="desc" rows="3" name="desc"></textarea>
                 </div>
                 <div>
-                  <button type="button" class="btn btn-success">SAVE</button>
-                  <button type="button" class="btn btn-danger">cancel</button>
+                  <button type="button" class="btn btn-success" >SAVE</button>
+                  <a href="/admin_dashboard" class="btn btn-danger disabled" tabindex="-1" role="button" aria-disabled="true">cancel</a>
                 </div>
               </form>
             </div>

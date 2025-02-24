@@ -11,20 +11,32 @@
     <div class="container">
         <div class="panel">
             <h2 style="text-align: center;">welcome to quizmaster</h2>
-            <div class="my_form" style="text-align: center;">
-                <h4>pleasae ragister yourself</h4>
-                <form action="POST">
-                    <label for="email">email(username):</label><br>
-                    <input type="email" id="username" name="username" placeholder="example@gmail.com" required><br>
-                    <label for="fullname">full name:</label><br>
-                    <input type="text" required><br>
-                    <label for="password">password:</label><br>
-                    <input type="password" id="password" required><br>
-                    <label for="qualification">Qualification:</label><br>
-                    <input type="text"><br>
-                    <label for="dob">Date of birth:</label><br>
-                    <input type="date"><br>
-                    <button type="button" class="btn btn-primary">Sign up</button>
+            <div class="my_form">
+                <p class="center">please ragister yourself</p>
+                <form action="sign_up" method="POST">
+                  <div class="mb-3">
+                    <label for="user_name" class="form-label">User name(E-Mail)</label>
+                    <input type="email" class="form-control" name="user_name" id="user_name">
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                  </div>
+                  <div class="mb-3">
+                    <label for="full_name" class="form-label">Fullname</label>
+                    <input type="text" class="form-control" name="full_name" id="full_name">
+                  </div>
+                  <div class="mb-3">
+                    <label for="qualification" class="form-label">qualification</label>
+                    <input type="text" class="form-control" name="qualification" id="qualification">
+                  </div>
+                  <div class="mb-3">
+                    <label for="dob" class="form-label">dob</label>
+                    <input type="date" class="form-control" name="dob" id="dob">
+                  </div>
+                  <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" style="text-align: center;font: 1em sans-serif;">Signup</button>
+                  </div>
                 </form>
             </div>
         </div>
