@@ -6,18 +6,19 @@ db=SQLAlchemy()
 class User(db.Model):
     __tablename__="User"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id=db.Column(db.Integer, primary_key=True, unique=True)
     full_name=db.Column(db.String(100), nullable=False)
     email=db.Column(db.String(100), nullable=False)
     password=db.Column(db.String(100), nullable=False)
     qualification=db.Column(db.String(100), nullable=False)
-    dOb=db.Column(db.Date, nullable=False)
+    dob=db.Column(db.Date, nullable=False)
+    role=db.Column(db.Integer, default=1, nullable=False)
     Score=db.relationship('Score', backref='User')
 
 class Subject(db.Model):
     __tablename__="Subject"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     name=db.Column(db.String(100), nullable=False)
     description=db.Column(db.String(100), nullable=False)
     chapter=db.relationship("Chapter", backref='Subject')
@@ -25,7 +26,7 @@ class Subject(db.Model):
 class Chapter(db.Model):
     __tablename__="Chapter"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True,unique=True)
     name=db.Column(db.String(100), nullable=False)
     description=db.Column(db.String(100), nullable=False)
     subject_id=db.Column(db.Integer, db.ForeignKey('Subject.id'), nullable=False)
@@ -35,7 +36,7 @@ class Chapter(db.Model):
 class Question(db.Model):
     __tablename__="Question"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     question=db.Column(db.String(100), nullable=False)
     option1=db.Column(db.String(100), nullable=False)
     option2=db.Column(db.String(100), nullable=False)
@@ -47,7 +48,7 @@ class Question(db.Model):
 class Quiz(db.Model):
     __tablename__="Quiz"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     Chapter_id=db.Column(db.Integer, db.ForeignKey('Chapter.id'))
     score=db.Column(db.Integer, nullable=False)
     date=db.Column(db.DateTime, nullable=False)
@@ -59,7 +60,7 @@ class Quiz(db.Model):
 class Score(db.Model):
     __tablename__="Score"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True , unique=True)
     user_id=db.Column(db.Integer, db.ForeignKey('User.id'))
     Quiz_id=db.Column(db.Integer, db.ForeignKey('Quiz.id'))
     time_taken=db.Column(db.Float)
