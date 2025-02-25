@@ -37,6 +37,7 @@ class Question(db.Model):
     __tablename__="Question"
 
     id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    title=db.Column(db.String(100),nullable=False)
     question=db.Column(db.String(100), nullable=False)
     option1=db.Column(db.String(100), nullable=False)
     option2=db.Column(db.String(100), nullable=False)

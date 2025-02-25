@@ -12,7 +12,7 @@
         <div class="panel">
             <h2>welcome to quizmaster</h2>
             <div class="my_form">
-              <form action="/admin_dashboard" method="POST">
+              <form action="new_chapter/<subject>" method="POST">
                 <div class="mb-3">
                     <label for="newchapter" class="form-label">chapter name</label>
                     <input type="email" class="form-control" id="newchapter" name="newchapter" >
@@ -26,6 +26,7 @@
                   <button type="button" class="btn btn-danger" >cancel</button>
                 </div>
               </form>
+              <h4>{{msg}}</h4>
             </div>
         </div>
     </div>

@@ -16,28 +16,30 @@
                 <form action="sign_up" method="POST">
                   <div class="mb-3">
                     <label for="user_name" class="form-label">User name(E-Mail)</label>
-                    <input type="email" class="form-control" name="user_name" id="user_name">
+                    <input type="email" class="form-control" name="user_name" id="user_name" required>
                   </div>
                   <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" id="password">
+                    <input type="password" class="form-control" name="password" id="password" required>
                   </div>
                   <div class="mb-3">
                     <label for="full_name" class="form-label">Fullname</label>
-                    <input type="text" class="form-control" name="full_name" id="full_name">
+                    <input type="text" class="form-control" name="full_name" id="full_name" required>
                   </div>
                   <div class="mb-3">
                     <label for="qualification" class="form-label">qualification</label>
-                    <input type="text" class="form-control" name="qualification" id="qualification">
+                    <input type="text" class="form-control" name="qualification" id="qualification" required>
                   </div>
                   <div class="mb-3">
                     <label for="dob" class="form-label">dob</label>
-                    <input type="date" class="form-control" name="dob" id="dob">
+                    <input type="date" class="form-control" name="dob" id="dob" required>
                   </div>
                   <div class="mb-3">
                     <button type="submit" class="btn btn-primary" style="text-align: center;font: 1em sans-serif;">Signup</button>
+                    Already ragistered! <a href="/login">login</a>
                   </div>
                 </form>
+                <h4>{{msg}}</h4>
             </div>
         </div>
     </div>
