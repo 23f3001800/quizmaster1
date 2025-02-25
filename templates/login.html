@@ -14,12 +14,20 @@
             <div class="my_form" style="text-align: center;">
                 <h3>pleasae login here</h3>
                 <form action="login" method="POST">
-                    <label for="email">email(username):</label><br>
-                    <input type="email" id="username" name="username" required><br>
-                    <label for="password" > password:  </label><br>
-                    <input type="password" id="password" name="password" required><br>
-                    <button type="button" class="btn btn-primary">login</button>
+                  <div class="mb-3">
+                    <label for="user_name" class="form-label">User name(E-Mail)</label>
+                    <input type="email" class="form-control" name="user_name" id="user_name" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" required>
+                  </div>
+                  <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" style="text-align: center;font: 1em sans-serif;">Signup</button>
+                    new user?<a href="/signup">login</a>
+                  </div>
                 </form>
+                <h4>{{msg}}</h4>
             </div>
         </div>
     </div>
