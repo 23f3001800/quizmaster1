@@ -1,4 +1,4 @@
-{%extends "user_layout.html"%}
+{%extends "admin_layout.html"%}
 {%block content%}
 {for s in score}
 <div class="my_form">
@@ -10,6 +10,6 @@
     <h6>sheduled date : {{s  }}</h6><br>
     <h6>duration : {{  }}</h6>
   </div><br>
-  <button class="btn btn-danger">close</button>
+  <button type="button" class="btn btn-danger">close</button>
 </div>
 {%endblock%}
