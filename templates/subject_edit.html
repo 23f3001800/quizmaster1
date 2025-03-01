@@ -1,14 +1,14 @@
-{%extends "admin_layout.html"%}
+{%extends "user_layout.html"%}
 {%block content%}
 <div class="my_form">
-    <form action="/new_subject/{{name}}" method="POST">
+    <form action="/new_subject" method="POST">
       <div class="mb-3">
         <label for="newsubject" class="form-label">new subject</label>
-        <input type="text" class="form-control" id="newsubject" name="new_subject" required>
+        <input type="text" class="form-control" id="newsubject" name="new_subject">
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">description</label>
-        <input type="text" class="form-control" id="desc" name="desc" required>
+        <input type="text" class="form-control" id="desc" name="desc" >
       </div>
       <div class="mb-3">
         <button type="submit" class="btn btn-success">SAVE</button>
@@ -19,5 +19,4 @@
 <div>
     <h4>{msg}</h4>
 </div>
-
 {%endblock%}
