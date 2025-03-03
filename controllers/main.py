@@ -68,13 +68,33 @@ def new_chapter(subject_id,name):
         return redirect(url_for('admin_dashboard',name=name, msg="chapter added successfully" ))
     return render_template("newchapter.html", msg='',name=name)
 
+@app.route("/new_chapter/<chapter_id>/<name>" ,methods=["GET","POST"])
+def edit_chapter(chapter_id,name):
+    chr=Chapter.query.filter_by(chapter_id)
+    if request.method=="POST":
+        chr_name=request.form.get("new_chapter")
+        desc=request.form.get("desc")
+        chr.name=chr_name
+        chr.description=desc
+        db.session.commit()
+        return redirect(url_for("admin_dashboard", name=name, msg="updated successfully"))
+    return render_template('subject_edit.html',msg="now you can edit",name=name, chr=chr)
 
-@app.route("/new_chapter/<subject_id>/<name>" ,methods=["GET","POST"])
-def edit_chapter(subject_id,name):
-    return render_template('subject_edit.html',msg="",name=name)
+
+@app.route("/subject/<subject_id>/<name>" ,methods=["GET","POST"])
+def edit_subject(subject_id,name):
+    subject=Subject.query.filter_by(subject_id)
+    if request.method=="POST":
+        sub_name=request.form.get("name")
+        desc=request.form.get("desc")
+        chr.name=sub_name
+        chr.description=desc
+        db.session.commit()
+        return redirect(url_for("admin_dashboard", name=name, msg="updated successfully"))
+    return render_template('subject_edit.html',msg="now you can edit",name=name, subject=subject)
 
 
-@app.route("/new_chapter/<chapter_id>/<name>/delete" ,methods=["GET","POST"])
+@app.route("/new_chapter/<chapter_id>/delete" ,methods=["GET","POST"])
 def delete_chapter(chapter_id,name):
     chapter=Chapter.query.filter_by(chapter_id)
     db.session.delete(chapter)
@@ -138,17 +158,41 @@ def view_score(quiz_id):
 
 @app.route("/user_score/<name>/<id>" ,methods=["GET","POST"])
 def scores(name,id):
-    return render_template("scores.html", name=name,id=id)
+    scores=Score.query.filter_by(id=id,name=name)
+    return render_template("scores.html", name=name, scores=scores)
 
 
-@app.route("/admin_search" ,methods=["GET","POST"])
-def admin_serch():
-    return render_template("scores.html")
+@app.route("/search/<name>" ,methods=["GET","POST"])
+def admin_search(name):
+    if request.method=="POST":
+        search_txt=request.form.get("admin_search")
+        by_user=User.query.filter(User.full_name.ilike(f"%{search_txt}")).all()
+        by_subject=Subject.query.filter(Subject.name.ilike(f"%{search_txt}")).all()
+        by_quiz=Quiz.query.filter(Quiz.name.ilike(f"%{search_txt}")).all()
+        if by_user:
+            render_template("admin_dashboard.html",name=name,users=by_user)
+        elif by_subject:
+            render_template("admin_dashboard.html",name=name,subjects=by_subject)
+        elif by_quiz:
+            render_template("admin_dashboard.html",name=name,quizzes=by_quiz)
+    return redirect(url_for("admin_dashboard", name=name))
 
 
-@app.route("/user_search" ,methods=["GET","POST"])
-def user_search():
-    return render_template("scores.html")
+@app.route("/user_search/<name>" ,methods=["GET","POST"])
+def user_search(name):
+    if request.method=="POST":
+        search_txt=request.form.get("admin_search")
+        by_user=User.query.filter(User.name.ilike(f"%{search_txt}")).all()
+        by_subject=Subject.query.filter(Subject.name.ilike(f"%{search_txt}")).all()
+        by_quiz=Quiz.query.filter(Quiz.name.ilike(f"%{search_txt}")).all()
+        if by_user:
+            render_template("admin_dashboard.html",name=name,users=by_user)
+        elif by_subject:
+            render_template("admin_dashboard.html",name=name,subjects=by_subject)
+        elif by_quiz:
+            render_template("admin_dashboard.html",name=name,quizzes=by_quiz)
+    return redirect(url_for("user_dashboard", name=name))
+
 
 @app.route("/user_summary/<id>/<name>" ,methods=["GET","POST"])
 def user_summary(id,name):
