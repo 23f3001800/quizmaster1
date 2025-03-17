@@ -5,3 +5,5 @@ from datetime import datetime
 
 api=Api()
 
+def get_subject(Resource):
+    return subjects

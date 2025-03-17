@@ -1,41 +1,44 @@
 {%extends "user_layout.html"%}
 {%block content%}
-<div class="my_form">
-    <h2>question statement</h2>
-    <br>
+  <div class="my_form">
     <form action="#" method="POST">
+      {%for q in quiz.Question%}
+      <fieldset>
+        <legend>{{q.question}}</legend>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault1">
             <label class="form-check-label" for="flexRadioDefault1">
-              Default radio
+              {{q.option1}}
             </label>
         </div>
         <br>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault2" checked>
             <label class="form-check-label" for="flexRadioDefault2">
-              Default checked radio
+              {{q.option2}}
             </label>
         </div>
         <br>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault1">
             <label class="form-check-label" for="flexRadioDefault1">
-              Default radio
+              {{q.option3}}
             </label>
         </div>
           <br>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault2" checked>
             <label class="form-check-label" for="flexRadioDefault2">
-              Default checked radio
+              {{q.option4}}
             </label>
         </div>
         <br>
         <div>
             <button type="submit" class="btn btn-success">SAVE</button>
-            <a class="btn btn-primary" href="/admin_dashboard/{{name}}" role="button">Cancel</a>
+            <a class="btn btn-primary" href="/user_dashboard/{{id}}/{{name}}" role="button">Cancel</a>
         </div>
+      </fieldset>
+      {%endfor%}
     </form>
-</div>
+  </div>
 {%endblock%}

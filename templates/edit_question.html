@@ -1,44 +1,39 @@
 {%extends "admin_layout.html"%}
 {%block content%}
 <div class="my_form1">
-    <form action="#" method="POST">
-        <div class="mb-3">
-            <label for="newchapter" class="form-label">quiz_id</label>
-            <input type="text" class="form-control" id="newchapter" name="quiz_id" disabled>
-        </div>
+    <form action="/edit_question" method="POST">
         <div class="mb-3">
             <label for="title" class="form-label">title</label>
-            <input type="text" class="form-control" id="title" name="title" >
+            <input type="text" class="form-control" id="title" name="title" value="{{q.title}}">
         </div>
         <div class="mb-3">
             <label for="statement" class="form-label">question statement</label>
-            <input type="text" class="form-control" id="statement" name="statement" >
+            <input type="text" class="form-control" id="statement" name="statement" value="{{q.question}}">
         </div>
         <div class="mb-3">
             <label for="o1" class="form-label">option 1</label>
-            <input type="text" class="form-control" id="o1" name="o1" >
+            <input type="text" class="form-control" id="o1" name="o1" value="{{q.option1}}">
         </div>
         <div class="mb-3">
             <label for="o2" class="form-label">option 2</label>
-            <input type="text" class="form-control" id="o2" name="o2" >
+            <input type="text" class="form-control" id="o2" name="o2" value="{{q.option2}}">
         </div>
         <div class="mb-3">
             <label for="o3" class="form-label">option 3</label>
-            <input type="text" class="form-control" id="o3" name="o3" >
+            <input type="text" class="form-control" id="o3" name="o3" value="{{q.option3}}">
         </div>
         <div class="mb-3">
             <label for="o4" class="form-label">option 4</label>
-            <input type="text" class="form-control" id="o4" name="o4" >
+            <input type="text" class="form-control" id="o4" name="o4" value="{{q.option4}}">
         </div>
         <div class="mb-3">
             <label for="newchapter" class="form-label">correct answer</label>
-            <input type="number" class="form-control" id="duration" name="ans" >
+            <input type="number" class="form-control" id="duration" name="ans" value="{{q.answer}}">
         </div>
         </div>
             <button type="submit" class="btn btn-success">Save and next</button>
-            <a class="btn btn-primary" href="/admin_dashboard/{{name}}" role="button">Cancel</a>
+            <a class="btn btn-primary" href="/quiz_management/{{name}}" role="button">Cancel</a>
         </div>
     </form>
-    <h4>{{msg}}</h4>
 </div>
 {%endblock%}
