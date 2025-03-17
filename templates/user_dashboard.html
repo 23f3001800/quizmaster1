@@ -19,24 +19,25 @@
         action
       </div>
     </div>
-    {%if quiz%}
-    {%for q in quiz%}
+    {%if quizzes%}
+    {%for q in quizzes%}
     <div class="row">
-        <div class="col">
-          {{q.id}}
-        </div>
-        <div class="col">
-          No.fo questions
-        </div>
-        <div class="col">
-          {{q.date}}
-        </div>
-        <div class="col">
-          {{q.time_duration}}
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-info">view</button><button type="button" class="btn btn-success">start</button>
-        </div>
+      <div class="col">
+        {{q.id}}
+      </div>
+      <div class="col">
+        {{q.Question | length}}
+      </div>
+      <div class="col">
+        {{q.date}}
+      </div>
+      <div class="col">
+        {{q.time_duration}}
+      </div>
+      <div class="col">
+        <a class="btn btn-success" href="/start_quiz/{{id}}/{{name}}/{{q.id}}" role="button">Start</a>
+        <a class="btn btn-primary" href="/view_quiz_d/{{id}}/{{name}}/{{q.id}}" role="button">view</a>     
+      </div>
     </div>
     {%endfor%}
     {%else%}

@@ -1,10 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 
 db=SQLAlchemy()
 
-class User(db.Model):
-    __tablename__="User"
+class Users(db.Model):
+    __tablename__="Users"
 
     id=db.Column(db.Integer, primary_key=True, unique=True)
     full_name=db.Column(db.String(100), nullable=False)
@@ -13,28 +14,42 @@ class User(db.Model):
     qualification=db.Column(db.String(100), nullable=False)
     dob=db.Column(db.Date, nullable=False)
     role=db.Column(db.Integer, default=1, nullable=False)
-    Score=db.relationship('Score', backref='User')
+    Score=db.relationship('Scores', backref='Users', cascade="all, delete-orphan")
 
-class Subject(db.Model):
-    __tablename__="Subject"
+class Subjects(db.Model):
+    __tablename__="Subjects"
 
     id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     name=db.Column(db.String(100), nullable=False)
     description=db.Column(db.String(100), nullable=False)
-    chapter=db.relationship("Chapter", backref='Subject')
+    chapter=db.relationship("Chapters", backref='Subjects', cascade="all, delete-orphan")
 
-class Chapter(db.Model):
-    __tablename__="Chapter"
+class Chapters(db.Model):
+    __tablename__="Chapters"
 
     id=db.Column(db.Integer, primary_key=True, autoincrement=True,unique=True)
     name=db.Column(db.String(100), nullable=False)
     description=db.Column(db.String(100), nullable=False)
-    subject_id=db.Column(db.Integer, db.ForeignKey('Subject.id'), nullable=False)
-    quiz=db.relationship('Quiz', backref="Chapter")
+    subject_id=db.Column(db.Integer, db.ForeignKey("Subjects.id", ondelete="CASCADE"), nullable=False)
+    quiz=db.relationship('Quizzes', backref="Chapters", cascade="all, delete-orphan")
 
 
-class Question(db.Model):
-    __tablename__="Question"
+
+class Quizzes(db.Model):
+    __tablename__="Quizzes"
+
+    id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    Chapter_id=db.Column(db.Integer, db.ForeignKey('Chapters.id',ondelete="CASCADE"))
+    score=db.Column(db.Integer, nullable=False)
+    date=db.Column(db.DateTime, nullable=False)
+    time_duration=db.Column(db.Float, nullable=False)
+    remark=db.Column(db.String(100))
+    Question=db.relationship('Questions', backref="Quizzes", cascade="all, delete-orphan")
+    Score=db.relationship('Scores', backref='Quizzes', cascade="all, delete-orphan")
+
+
+class Questions(db.Model):
+    __tablename__="Questions"
 
     id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     title=db.Column(db.String(100),nullable=False)
@@ -44,29 +59,19 @@ class Question(db.Model):
     option3=db.Column(db.String(100), nullable=False)
     option4=db.Column(db.String(100), nullable=False)
     answer=db.Column(db.String(100), nullable=False)
-    Quiz_id=db.Column(db.Integer, db.ForeignKey('Quiz.id'), nullable=False)
+    Quiz_id=db.Column(db.Integer, db.ForeignKey('Quizzes.id', ondelete="CASCADE"), nullable=False)
+    marks=db.Column(db.Integer, default=1)
 
-class Quiz(db.Model):
-    __tablename__="Quiz"
 
-    id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
-    Chapter_id=db.Column(db.Integer, db.ForeignKey('Chapter.id'))
-    score=db.Column(db.Integer, nullable=False)
-    date=db.Column(db.DateTime, nullable=False)
-    time_duration=db.Column(db.Float, nullable=False)
-    remark=db.Column(db.String(100))
-    Score=db.relationship('Score', backref="Quiz")
-    Question=db.relationship('Question')
-
-class Score(db.Model):
-    __tablename__="Score"
+class Scores(db.Model):
+    __tablename__="Scores"
 
     id=db.Column(db.Integer, primary_key=True, autoincrement=True , unique=True)
-    user_id=db.Column(db.Integer, db.ForeignKey('User.id'))
-    Quiz_id=db.Column(db.Integer, db.ForeignKey('Quiz.id'))
+    user_id=db.Column(db.Integer, db.ForeignKey('Users.id', ondelete="CASCADE"))
+    Quiz_id=db.Column(db.Integer, db.ForeignKey('Quizzes.id', ondelete="CASCADE"))
     time_taken=db.Column(db.Float)
-    total_score=db.Column(db.Integer, nullable=False)
-    date=db.Column(db.Date, nullable=False)
+    score=db.Column(db.Integer, nullable=False)
+    date=db.Column(db.DateTime, default=datetime.utcnow)
 
 
 

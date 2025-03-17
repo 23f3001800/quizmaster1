@@ -1,6 +1,6 @@
 {%extends "user_layout.html"%}
 {%block content%}
-<div class="small_form">
+  <div class="small_form">
     <div class="container text-center">
       <div class="row">
         <div class="col">
@@ -16,19 +16,28 @@
           score
         </div>
       </div>
+      {%if scores%}
+      {%for s in scores%}
       <div class="row">
-          <div class="col">
-            ID
-          </div>
-          <div class="col">
-            No.fo questions
-          </div>
-          <div class="col">
-            date
-          </div>
-          <div class="col">
-            score
-          </div>
+        <div class="col">
+          {{s.id}}
+        </div>
+        <div class="col">
+          {{ s.Score.Question | length }}
+        </div>
+        <div class="col">
+          {{s.date}}
+        </div>
+        <div class="col">
+         {{s.score}}
+        </div>
+      </div>
+      {%endfor%}
+      {%else%}
+      <div>
+        <p>you did not attempt any quiz yet</p>
+      </div>
+      {%endif%}
     </div>
-</div>
+  </div>
 {%endblock%}

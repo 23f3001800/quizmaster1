@@ -2,28 +2,28 @@
 {%block content%}
 <div class="my_form">
   <form action="#" method="POST">
-      <label for="chapter_id">chapter_id</label>
-      <select class="form-select" name="chapter_id" aria-label="Default select example">
-        {%for c in chapter%}
-          <option value="{{c.id}}">{{c.id}}</option>
-        {%endfor%}
-      </select>
-      <div class="mb-3">
-          <label for="newchapter" class="form-label">Total Score</label>
-          <input type="number" class="form-control" id="total_score" name="total_score" >
-      </div>
-      <div class="mb-3">
-          <label for="newchapter" class="form-label">Date and Time</label>
-          <input type="datetime-local" min="2025-01-01T00:00" class="form-control" id="datetime" name="datetime" >
-      </div>
-      <div class="mb-3">
-          <label for="newchapter" class="form-label"> Time duration</label>
-          <input type="number" class="form-control" id="duration" name="duration" >
-      </div>
-      <div>
-          <button type="submit" class="btn btn-success">SAVE</button>
-          <a class="btn btn-primary" href="/quiz_management/{{name}}" role="button">Cancel</a>
-      </div>
+    <label for="chapter_id">chapter_id</label>
+    <select class="form-select" name="chapter_id" aria-label="Default select example">
+      {%for c in chapter%}
+        <option value="{{c.id}}">{{c.id}}</option>
+      {%endfor%}
+    </select>
+    <div class="mb-3">
+        <label for="newchapter" class="form-label">Total Score</label>
+        <input type="number" class="form-control" id="total_score" name="total_score" >
+    </div>
+    <div class="mb-3">
+        <label for="newchapter" class="form-label">Date and Time</label>
+        <input type="datetime-local" min="2025-01-01T00:00" class="form-control" id="datetime" name="datetime" >
+    </div>
+    <div class="mb-3">
+        <label for="newchapter" class="form-label"> Time duration</label>
+        <input type="number" class="form-control" id="duration" name="duration" >
+    </div>
+    <div>
+        <button type="submit" class="btn btn-success">SAVE</button>
+        <a class="btn btn-primary" href="/quiz_management/{{name}}" role="button">Cancel</a>
+    </div>
   </form>
 <h4>{{msg}}</h4>
 </div>

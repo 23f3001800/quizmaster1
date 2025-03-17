@@ -1,15 +1,14 @@
-{%extends "admin_layout.html"%}
+{%extends "user_layout.html"%}
 {%block content%}
-{for s in score}
-<div class="my_form">
-  <div>
-    <h6> ID : {{s.id }}</h6><br>
-    <h6> Subject : {{ s.name  }}</h6><br>
-    <h6> chapter : {{ s.  }}</h6><br>
-    <h6> No. of question : {{  }}</h6><br>
-    <h6>sheduled date : {{s  }}</h6><br>
-    <h6>duration : {{  }}</h6>
-  </div><br>
-  <button type="button" class="btn btn-danger">close</button>
-</div>
+                <div class="my_form">
+                <div>
+                  <h6> ID : {{quiz.id }}</h6><br>
+                  <h6> Subject : {{ quiz.Chapters.Subjects.name  }}</h6><br>
+                  <h6> chapter : {{ quiz.Chapters.name }}</h6><br>
+                  <h6> No. of question : {{ quiz.Question | length }}</h6><br>
+                  <h6>sheduled date : {{quiz.date }}</h6><br>
+                  <h6>duration : {{quiz.time_duration  }} minuts</h6>
+                </div><br>
+                <a class="btn btn-danger" href="/user_dashboard/{{id}}/{{name}}" role="button">Close</a>
+                </div>
 {%endblock%}
