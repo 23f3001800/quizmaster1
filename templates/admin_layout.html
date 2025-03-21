@@ -6,42 +6,41 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-  <div class="container">
-    <div class="center"><h1>welcome in quizmaster</h1></div>
-      <div class="panel">
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-          <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarText">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/admin_dashboard/{{name}}">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/quiz_management/{{name}}">Quiz</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/admin_summary{{name}}">summary</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/login">Logout</a>
-                </li>
-              </ul>
-              <form class="d-flex" method="POST" action="/search/{{name}}">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="admin_search" id="admin_search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
-              <span class="navbar-text">
-                Welcome to {{name}}
-              </span>
-            </div>
-          </div>
-        </nav>
-        {%block content%}
-        <!--This part is getting from child html-->
-        {%endblock%}
-        <h4>{{msg}}</h4>
+  <div style="width: 95%; margin-left: 30px;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/admin_dashboard/{{name}}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/quiz_management/{{name}}">Quiz</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/users/{{name}}">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/admin_summary/{{name}}">summary</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Logout</a>
+            </li>
+          </ul>
+          <form class="d-flex" method="POST" action="/search/{{name}}">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="admin_search" id="admin_search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          <span class="navbar-text">
+            Welcome to {{name}}
+          </span>
+        </div>
       </div>
-    </div>
+    </nav>
+    {%block content%}
+    <!--This part is getting from child html-->
+    {%endblock%}
+    <h4>{{msg}}</h4>
   </div>
 </body>
 </html>

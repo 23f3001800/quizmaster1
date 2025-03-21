@@ -3,23 +3,26 @@
 }
 .container{
     border: 2px solid black;
+    width: 180%;
 }
 .panel{
     width: 90%;
     margin: auto;
+    height: 700px;
     height: auto;
+    margin: 10px;
     border: 1px solid black;
     
 }
 
 .my_form{
     border: 1px solid black;
-    width: 600px;
-    height: 520px;
+    width: 400;
+    height: auto;
     margin: 10px;
     margin-top: 20px;
     padding: 10px;
-    margin-left: 120px;
+    margin-left: 260px;
     border-radius: 10px;
     text-align: justify;
 }
@@ -38,13 +41,14 @@
 
 .small_form{
     border: 1px solid black;
-    width: 600px;
+    width: 80%;
     height: auto;
     margin-top: 20px;
     padding: 20px;
     border-radius: 10px;
-    margin-left: 50px;
-    padding-bottom: 30px;
+    margin-left: 100px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
 }
 
 .nav{

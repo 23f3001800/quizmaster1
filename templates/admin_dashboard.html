@@ -4,19 +4,21 @@
             <div>
               {%for subject in subjects%}  
               <div class="small_form">
-                <h4 class="center">{{subject.name}}</h4>
                 <div style="text-align: right;">
-                  <a class="btn btn-primary" href="/subject/{{subject.id}}/{{name}}" role="button">edit</a>
-                  <a class="btn btn-primary" href="/subject/{{subject.id}}/{{name}}/delete" role="button">delete</a>
+                  <h4 class="center">{{subject.name}}</h4>
+                  <a class="btn btn-success" href="/subject/{{subject.id}}/{{name}}" role="button">edit</a>
+                  <a class="btn btn-danger" href="/subject/{{subject.id}}/{{name}}/delete" role="button">delete</a>
                 </div>
-                <h5>{{subject.description}}</h5>
                 <div class="container text-center">
                   <div class="row">
+                    <div class="col">
+                      chapter id
+                    </div>
                     <div class="col">
                       chapter name
                     </div>
                     <div class="col">
-                      No.fo questions
+                     no. of quizzes
                     </div>
                     <div class="col">
                       Action
@@ -26,14 +28,17 @@
                   {%for chapter in subject.chapter%}
                   <div class="row">
                     <div class="col">
-                      {{chapter.name}}
+                      C00{{chapter.id}}
                     </div>
                     <div class="col">
-                    {{chapter.description}}
+                    {{chapter.name}}
                     </div>
                     <div class="col">
-                      <a class="btn btn-primary" href="/edit/{{subject.id}}/{{chapter.id}}/{{name}}" role="button">edit</a>
-                      <a class="btn btn-primary" href="/chapter/{{chapter.id}}/{{name}}/delete" role="button">delete</a>
+                      {{chapter.quiz | length}}
+                    </div>
+                    <div class="col">
+                      <a class="btn btn-success" href="/edit/{{subject.id}}/{{chapter.id}}/{{name}}" role="button">edit</a>
+                      <a class="btn btn-danger" href="/chapter/{{chapter.id}}/{{name}}/delete" role="button">delete</a>
                     </div>
                   </div>
                   {%endfor%}
@@ -42,19 +47,19 @@
                     <h5>no chapter added yet</h5>
                   </div>
                   {%endif%}
-                  </div>
-                    <a class="btn btn-primary" href="/new_chapter/{{subject.id}}/{{name}}" role="button">add chapters</a>
+                  <div style="text-align: right;">
+                    <a class="btn btn-outline-success" href="/new_chapter/{{subject.id}}/{{name}}" role="button">add chapters</a>
                   </div>
                 </div>
-                {%endfor%}
               </div>
+              {%endfor%}
               {%else%}
               <div>
                 <h4>No Subject added till now</h4>
               </div>
               {%endif%}
               <div class="center">
-                <a class="btn btn-primary" href="/new_subject/{{name}}" role="button">add subject</a>
+                <a class="btn btn-outline-primary" href="/new_subject/{{name}}" role="button">add subject</a>
               </div>
             </div>
 {%endblock%}
