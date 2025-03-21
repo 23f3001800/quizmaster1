@@ -1,0 +1,61 @@
+{%extends "admin_layout.html"%}
+{%block content%}
+              {%if users%}
+              <div class="small_form">
+                <div class="container text-center">
+                  <div class="row">
+                    <div class="col">
+                      userid
+                    </div>
+                    <div class="col">
+                      user_name
+                    </div>
+                    <div class="col">
+                       fullname
+                    </div>
+                    <div class="col">
+                        qualification
+                    </div>
+                    <div class="col">
+                      DOB
+                    </div>
+                    <div class="col">
+                      status
+                    </div>
+                    <div class="col">
+                      Action
+                    </div>
+                  </div>
+                  {%for user in users%}
+                  <div class="row">
+                    <div class="col">
+                      U00{{user.id}}
+                    </div>
+                    <div class="col">
+                      {{user.user_name}}
+                    </div>
+                    <div class="col">
+                       {{user.full_name}}
+                    </div>
+                    <div class="col">
+                       {{user.qualification}}
+                    </div>
+                    <div class="col">
+                        {{user.dob}}
+                    </div>
+                    <div class="col">
+                        active
+                    </div>
+                    <div class="col">
+                        <a href="*"></a>
+                    </div>
+                  </div>
+                  {%endfor%}
+                  {%else%}
+                  <div>
+                    <h5>no user</h5>
+                  </div>
+                  {%endif%}
+                </div>
+              </div>
+{%endblock%}

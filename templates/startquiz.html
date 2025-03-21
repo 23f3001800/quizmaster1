@@ -1,10 +1,9 @@
 {%extends "user_layout.html"%}
 {%block content%}
   <div class="my_form">
-    <form action="#" method="POST">
-      {%for q in quiz.Question%}
+    <form action="/start_quiz" method="POST">
       <fieldset>
-        <legend>{{q.question}}</legend>
+        <legend>{{index+1}}.{{q.question}}</legend>
         <div class="form-check">
             <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault1">
             <label class="form-check-label" for="flexRadioDefault1">
@@ -38,7 +37,6 @@
             <a class="btn btn-primary" href="/user_dashboard/{{id}}/{{name}}" role="button">Cancel</a>
         </div>
       </fieldset>
-      {%endfor%}
     </form>
   </div>
 {%endblock%}

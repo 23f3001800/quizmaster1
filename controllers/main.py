@@ -2,6 +2,7 @@ from flask import Flask, render_template,url_for, redirect,request
 from flask import current_app as app
 from models.database import db, Users, Subjects,Chapters, Questions, Quizzes, Scores
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 
 @app.route("/")
@@ -164,9 +165,9 @@ def new_question(quiz_id,name):
         question=Questions(title=qtit,question=qes,option1=o1, option2=o2,option3=o3,option4=o4,answer=ans, Quiz_id=quiz_id)
         db.session.add(question)
         db.session.commit()
-        return redirect(url_for("quiz_management",name=name,msg="question added successfully" ))
-
-    return render_template("newquestion.html", quiz_id=quiz_id, name=name)
+        return redirect(url_for("new_question", quiz_id=quiz_id, name=name))
+    q_count=Questions.query.filter_by(Quiz_id=quiz_id).count()
+    return render_template("newquestion.html", quiz_id=quiz_id, name=name, q_count=q_count)
 
 
 @app.route("/edit_question/<question_id>/<name>" ,methods=["GET","POST"])
@@ -200,6 +201,12 @@ def delete_question(question_id,name):
     return redirect(url_for("quiz_management", msg="", name=name))
 
 
+@app.route("/users/<name>" ,methods=["GET","POST"])
+def user_dashboard(name):
+    users=Users.query.all()
+    return render_template("users.html",name=name, users=users)
+
+
 @app.route("/user_dashboard/<id>/<name>" ,methods=["GET","POST"])
 def user_dashboard(name,id):
     quizzes=Quizzes.query.all()
@@ -210,15 +217,20 @@ def user_dashboard(name,id):
 @app.route("/start_quiz/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def start_quiz(id,name,quiz_id):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
-    q=quiz.Question
+    qu=quiz.Question
+    index=0
+    if index>=len(qu):
+        return redirect(url_for("result",quiz_id=quiz_id))
     tscore=0
+    q=qu[index]
     if request.method=="POST":
         user_ans=request.form.get("answer")
         if user_ans==q.answer:
             tscore=tscore+q.marks
         else:
             tscore=tscore
-        return redirect(url_for("start_quiz", id=id,name=name,quiz=quiz))
+        return redirect(url_for("start_quiz", id=id,name=name,q=q,index=index+1))
+    scores=Scores(Quiz_id=quiz_id,user_id=id,score=tscore,)
     return render_template("startquiz.html",id=id,name=name,quiz=quiz)
 
 
@@ -243,14 +255,15 @@ def admin_search(name):
     if request.method=="POST":
         search_txt=request.form.get("admin_search")
         by_user=Users.query.filter(Users.full_name.ilike(f"%{search_txt}")).all()
-        by_subject=Subjects.query.filter(Subjects.name.ilike(f"%{search_txt}")).all()
+        by_score=Subjects.query.filter(Scores.date.ilike(f"%{search_txt}")).all()
         by_quiz=Quizzes.query.filter(Quizzes.name.ilike(f"%{search_txt}")).all()
         if by_user:
-            render_template("admin_dashboard.html",name=name,users=by_user)
-        elif by_subject:
-            render_template("admin_dashboard.html",name=name,subjects=by_subject)
+           render_template("users.html",name=name,users=by_user)
+        if by_score:
+            render_template("score.html",name=name,score=by_score)
         elif by_quiz:
-            render_template("admin_dashboard.html",name=name,quizzes=by_quiz)
+            render_template("quiz_management.html",name=name,quizzes=by_quiz)
+        
     return redirect(url_for("admin_dashboard", name=name))
 
 
@@ -258,12 +271,12 @@ def admin_search(name):
 def user_search(name):
     if request.method=="POST":
         search_txt=request.form.get("admin_search")
-        by_user=Users.query.filter(Users.name.ilike(f"%{search_txt}")).all()
+        #by_user=Users.query.filter(Users.name.ilike(f"%{search_txt}")).all()
         by_subject=Subjects.query.filter(Subjects.name.ilike(f"%{search_txt}")).all()
         by_quiz=Quizzes.query.filter(Quizzes.name.ilike(f"%{search_txt}")).all()
-        if by_user:
-            render_template("admin_dashboard.html",name=name,users=by_user)
-        elif by_subject:
+        #if by_user:
+         #   render_template("admin_dashboard.html",name=name,users=by_user)
+        if by_subject:
             render_template("admin_dashboard.html",name=name,subjects=by_subject)
         elif by_quiz:
             render_template("admin_dashboard.html",name=name,quizzes=by_quiz)
@@ -272,11 +285,31 @@ def user_search(name):
 
 @app.route("/user_summary/<id>/<name>" ,methods=["GET","POST"])
 def user_summary(id,name):
+    plt=get_plt()
+    plt.savefig("./static/images/admin_summary.jpeg")
+    plt.clf()
+
     return render_template("user_summary.html",id=id,name=name)
 
 @app.route("/admin_summary/<name>" ,methods=["GET","POST"])
 def admin_summary(name):
+    plt=get_plt()
+    plt.savefig("./static/images/admin_summary.jpeg")
+    plt.clf()
     return render_template("admin_summary.html", name=name)
+
+def get_plt():
+    sub=Subjects.query.all()
+    l={}
+    for s in sub:
+        l[s.name]=s.chapter.quiz.score
+    x_label=list(l.keys())
+    y_lable=list(l.values())
+    plt.bar(x_label,y_lable,color="red",width=.4)
+    plt.title('subject vs score')
+    plt.xlabel('sub')
+    plt.ylabel('score')
+    return plt
 
 
 
