@@ -1,42 +1,21 @@
 {%extends "user_layout.html"%}
 {%block content%}
   <div class="my_form">
-    <form action="/start_quiz" method="POST">
-      <fieldset>
-        <legend>{{index+1}}.{{q.question}}</legend>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1">
-              {{q.option1}}
-            </label>
-        </div>
-        <br>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault2" checked>
-            <label class="form-check-label" for="flexRadioDefault2">
-              {{q.option2}}
-            </label>
-        </div>
-        <br>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1">
-              {{q.option3}}
-            </label>
-        </div>
-          <br>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="answer" id="flexRadioDefault2" checked>
-            <label class="form-check-label" for="flexRadioDefault2">
-              {{q.option4}}
-            </label>
-        </div>
-        <br>
-        <div>
-            <button type="submit" class="btn btn-success">SAVE</button>
-            <a class="btn btn-primary" href="/user_dashboard/{{id}}/{{name}}" role="button">Cancel</a>
-        </div>
-      </fieldset>
+    <h2>Question {{q_index+1}} of {{total}}</h2>
+    <p>{{question.title}}</p>
+    <form action="{{ url_for('start_quiz', id=id, quiz_id=quiz_id,name=name) }}" method="POST">
+      <input type="hidden" name="quiz_id" value="{{quiz_id}}">
+      <input type="hidden" name="q_index" value="{{q_index}}">
+      <input type="hidden" name="q_id" value="{{question.id}}">
+      <input type="hidden" name="id" value="{{id}}">
+
+
+
+      <label><input type="radio" name="answer" value="1">{{question.option1}}</label><br>
+      <label><input type="radio" name="answer" value="2">{{question.option2}}</label><br>
+      <label><input type="radio" name="answer" value="3">{{question.option3}}</label><br>
+      <label><input type="radio" name="answer" value="4">{{question.option4}}</label><br>
+      <button type="submit">save and next</button>
     </form>
   </div>
 {%endblock%}
