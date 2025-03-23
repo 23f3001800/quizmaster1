@@ -1,0 +1,8 @@
+{%extends "user_layout.html"%}
+{%block content%}
+                <div class="my_form">
+                  <h4>quiz completed</h4>
+                  <p>you {{correct}} out of total{{total}} and your score {{correct}}</p>
+                  <a class="btn btn-danger" href="/user_dashboard/{{id}}/{{name}}" role="button">Close</a>
+                </div>
+{%endblock%}

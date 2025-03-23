@@ -2,7 +2,10 @@ from flask import Flask, render_template,url_for, redirect,request
 from flask import current_app as app
 from models.database import db, Users, Subjects,Chapters, Questions, Quizzes, Scores
 from datetime import datetime
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from sqlalchemy import text
 
 
 @app.route("/")
@@ -202,8 +205,8 @@ def delete_question(question_id,name):
 
 
 @app.route("/users/<name>" ,methods=["GET","POST"])
-def user_dashboard(name):
-    users=Users.query.all()
+def users(name):
+    users=Users.query.filter_by(role=1).first()
     return render_template("users.html",name=name, users=users)
 
 
@@ -217,27 +220,40 @@ def user_dashboard(name,id):
 @app.route("/start_quiz/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def start_quiz(id,name,quiz_id):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
-    qu=quiz.Question
-    index=0
-    if index>=len(qu):
-        return redirect(url_for("result",quiz_id=quiz_id))
-    tscore=0
-    q=qu[index]
+    if datetime.now() < quiz.date:
+        return "quiz is not started yet"
+    ques=Questions.query.filter_by(id=quiz_id).all()
+    total=len(ques)
+    scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
+    if not scores:
+        scores=Scores(user_id=id,Quiz_id=quiz_id,score=0,date=quiz.date)
+        db.session.add(scores)
+        db.session.commit()
+
     if request.method=="POST":
-        user_ans=request.form.get("answer")
-        if user_ans==q.answer:
-            tscore=tscore+q.marks
-        else:
-            tscore=tscore
-        return redirect(url_for("start_quiz", id=id,name=name,q=q,index=index+1))
-    scores=Scores(Quiz_id=quiz_id,user_id=id,score=tscore,)
-    return render_template("startquiz.html",id=id,name=name,quiz=quiz)
+        q_id=request.form.get("q_id",type=int)
+        ans=request.form.get("answer",type=int)
+        print(ans)
+        q_index=request.form.get("q_index",type=int)
+        question=Questions.query.filter_by(id=q_id).first()
+        print(question.answer)
+        if ans==question.answer:
+            scores.score+=1
+            db.session.commit()
+        next_index=q_index+1
+        if next_index>=total:
+            return redirect(url_for('view_score',quiz_id=quiz_id,id=id,name=name))
+    else:
+        next_index=0
+    current_question=ques[next_index]
+    return render_template("startquiz.html",name=name,id=id,quiz_id=quiz_id,question=current_question,q_index=next_index,total=total)
 
 
 @app.route("/view_quiz/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def view_score(id,name,quiz_id):
-    quiz=Quizzes.query.filter_by(quiz_id)
-    return render_template("view.html",quiz=quiz,id=id,name=name)
+    scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
+    total_q=Questions.query.filter_by(Quiz_id=quiz_id).count()
+    return render_template("view_result.html",currect=scores.score,id=id,total=total_q,name=name)
 
 @app.route("/view_quiz_d/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def view_quiz_details(id,quiz_id,name):
@@ -247,7 +263,7 @@ def view_quiz_details(id,quiz_id,name):
 @app.route("/user_score/<id>/<name>" ,methods=["GET","POST"])
 def scores(id,name):
     scores=Scores.query.filter_by(user_id=id)
-    return render_template("scores.html",id=id, name=name, scores=scores)
+    return render_template("scores.html",id=id, name=name,scores=scores)
 
 
 @app.route("/search/<name>" ,methods=["GET","POST"])
@@ -256,7 +272,7 @@ def admin_search(name):
         search_txt=request.form.get("admin_search")
         by_user=Users.query.filter(Users.full_name.ilike(f"%{search_txt}")).all()
         by_score=Subjects.query.filter(Scores.date.ilike(f"%{search_txt}")).all()
-        by_quiz=Quizzes.query.filter(Quizzes.name.ilike(f"%{search_txt}")).all()
+        by_quiz=Quizzes.query.filter(Quizzes.title.ilike(f"%{search_txt}")).all()
         if by_user:
            render_template("users.html",name=name,users=by_user)
         if by_score:
@@ -271,38 +287,41 @@ def admin_search(name):
 def user_search(name):
     if request.method=="POST":
         search_txt=request.form.get("admin_search")
-        #by_user=Users.query.filter(Users.name.ilike(f"%{search_txt}")).all()
-        by_subject=Subjects.query.filter(Subjects.name.ilike(f"%{search_txt}")).all()
-        by_quiz=Quizzes.query.filter(Quizzes.name.ilike(f"%{search_txt}")).all()
-        #if by_user:
-         #   render_template("admin_dashboard.html",name=name,users=by_user)
-        if by_subject:
-            render_template("admin_dashboard.html",name=name,subjects=by_subject)
-        elif by_quiz:
+        by_quiz=Quizzes.query.filter(Quizzes.title.ilike(f"%{search_txt}")).all()
+        if by_quiz:
             render_template("admin_dashboard.html",name=name,quizzes=by_quiz)
     return redirect(url_for("user_dashboard", name=name))
 
 
 @app.route("/user_summary/<id>/<name>" ,methods=["GET","POST"])
 def user_summary(id,name):
-    plt=get_plt()
-    plt.savefig("./static/images/admin_summary.jpeg")
+    get_user_plt(id).savefig("./static/images/user_summary1.jpeg")
     plt.clf()
+    get_u_pie_plt(id).savefig("./static/images/user_summary2.jpeg")
+    plt.close()
 
     return render_template("user_summary.html",id=id,name=name)
 
 @app.route("/admin_summary/<name>" ,methods=["GET","POST"])
 def admin_summary(name):
-    plt=get_plt()
-    plt.savefig("./static/images/admin_summary.jpeg")
+    get_plt().savefig("./static/images/admin_summary1.jpeg")
     plt.clf()
+    get_pie_plt().savefig("./static/images/admin_summary2.jpeg")
+    plt.clf()
+
+
     return render_template("admin_summary.html", name=name)
 
 def get_plt():
-    sub=Subjects.query.all()
-    l={}
-    for s in sub:
-        l[s.name]=s.chapter.quiz.score
+    results=db.session.execute(text("""
+    select Subjects.name ,max(Scores.score)
+    from Subjects
+    join Chapters on Subjects.id=Chapters.subject_id          
+    join Quizzes on Chapters.id=Quizzes.chapter_id
+    join Scores on Quizzes.id=Scores.Quiz_id
+    group by Subjects.name                          
+    """)).fetchall()
+    l=dict(results)
     x_label=list(l.keys())
     y_lable=list(l.values())
     plt.bar(x_label,y_lable,color="red",width=.4)
@@ -311,6 +330,55 @@ def get_plt():
     plt.ylabel('score')
     return plt
 
+def get_user_plt(user_id):
+    results=db.session.execute(text("""
+    select Subjects.name ,count(Quizzes.id)
+    from Subjects
+    join Chapters on Subjects.id=Chapters.subject_id          
+    join Quizzes on Chapters.id=Quizzes.chapter_id
+    join Scores on Scores.Quiz_id=Quizzes.id
+    where Scores.user_id=:user_id
+    group by Subjects.name                          
+    """),{"user_id":user_id}).fetchall()
+    l=dict(results)
+    x_label=list(l.keys())
+    y_lable=list(l.values())
+    plt.bar(x_label,y_lable,color="red",width=.4)
+    plt.title('subject vs Quizzes')
+    plt.xlabel('sub')
+    plt.ylabel('Quizzes')
+    return plt
+def get_pie_plt():
+    results=db.session.execute(text("""
+    select Subjects.name ,count(Scores.id)
+    from Subjects
+    join Chapters on Subjects.id=Chapters.subject_id          
+    join Quizzes on Chapters.id=Quizzes.chapter_id
+    join Scores on Quizzes.id=Scores.Quiz_id
+    join Users on Scores.user_id=Users.id
+    group by Subjects.name                          
+    """),{"user_id":id}).fetchall()
+    l=dict(results)
+    x_label=list(l.keys())
+    y_label=list(l.values())
+    plt.pie(y_label, labels=x_label)
+    return plt
+
+def get_u_pie_plt(user_id):
+    results=db.session.execute(text("""
+    select Subjects.name ,count(Scores.id)
+    from Subjects
+    join Chapters on Subjects.id=Chapters.subject_id          
+    join Quizzes on Chapters.id=Quizzes.chapter_id
+    join Scores on Scores.Quiz_id=Quizzes.id
+    where Scores.user_id=:user_id
+    group by Subjects.name                          
+    """),{"user_id":user_id}).fetchall()
+    l=dict(results)
+    x_label=list(l.keys())
+    y_label=list(l.values())
+    plt.pie(y_label, labels=x_label)
+    return plt
 
 
 
