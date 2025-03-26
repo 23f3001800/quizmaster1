@@ -40,10 +40,12 @@ def login():
         if user and user.role==0:
             return redirect(url_for('admin_dashboard',name=user.full_name))
         elif user and user.role==1:
+            if user.status=="Blocked":
+                return render_template('login.html',msg="you are blocked by admin kindly contact this mail admin@gmail.com")
             return redirect(url_for("user_dashboard",name=user.full_name,id=user.id))
         else:
             return render_template('login.html', msg='invalid user')
-    return render_template("login.html", msg="")
+    return render_template("login.html", msg="login here")
         
 @app.route("/admin_dashboard/<name>")
 def admin_dashboard(name):
@@ -58,8 +60,8 @@ def new_subject(name):
         subject=Subjects(name=new_subject,description=desc)
         db.session.add(subject)
         db.session.commit()
-        return redirect(url_for('admin_dashboard',name=name))
-    return render_template("newsubject.html", name=name)
+        return redirect(url_for('admin_dashboard',name=name,msg="suject added successfully"))
+    return render_template("newsubject.html", name=name,msg="add subject here")
 
 @app.route("/subject/<subject_id>/<name>" ,methods=["GET","POST"])
 def edit_subject(subject_id,name):
@@ -122,15 +124,21 @@ def new_quiz(name):
     chapter=Chapters.query.all()
     if request.method=="POST":
         chapter_id=request.form.get("chapter_id")
+        title=request.form.get("title")
         date=request.form.get("datetime")
         score=request.form.get("total_score")
         duration=request.form.get("duration")
         d=datetime.fromisoformat(date)
-        quiz=Quizzes(Chapter_id=chapter_id,date=d,score=score,time_duration=duration)
+        quiz=Quizzes(Chapter_id=chapter_id,date=d,title=title,total_score=score,time_duration=duration)
         db.session.add(quiz)
         db.session.commit()
         return redirect(url_for("quiz_management", name=name, msg="quiz added"))
     return render_template("newquiz.html",chapter=chapter, name=name, msg="")
+
+app.route("/view_quiz_detail/<name>/<quiz_id>" ,methods=["GET","POST"])
+def admin_quiz_details(quiz_id,name):
+    quiz=Quizzes.query.filter_by(id=quiz_id).first()
+    return render_template("adminview_quiz_d.html",quiz=quiz,name=name)
 
 @app.route("/edit_quiz/<quiz_id>/<name>" ,methods=["GET","POST"])
 def edit_quiz(quiz_id,name):
@@ -141,7 +149,7 @@ def edit_quiz(quiz_id,name):
         duration=request.form.get("duration")
         d=datetime.fromisoformat(date)
         q.date=d
-        q.score=score
+        q.total_score=score
         q.duration=duration
         db.session.commit()
         return redirect(url_for("quiz_management", name=name, msg="updated successfully"))
@@ -153,7 +161,7 @@ def delete_quiz(quiz_id,name):
     q=Quizzes.query.filter_by(id=quiz_id).first()
     db.session.delete(q)
     db.session.commit()
-    return redirect(url_for("admin_dashboard.html", msg="", name=name))
+    return redirect(url_for("quiz_management", msg="deleted successfuly", name=name))
 
 @app.route("/new_question/<quiz_id>/<name>" ,methods=["GET","POST"])
 def new_question(quiz_id,name):
@@ -177,15 +185,12 @@ def new_question(quiz_id,name):
 def edit_question(question_id,name):
     q=Questions.query.filter_by(id=question_id).first()
     if request.method=="POST":
-        qtit=request.form.get('title')
         ques=request.form.get('statement')
         o1=request.form.get('o1')
         o2=request.form.get("o2")
         o3=request.form.get("o3")
         o4=request.form.get("o4")
         ans=request.form.get("ans")
-        db.session.commit()
-        q.title=qtit
         q.question=ques
         q.option1=o1
         q.option=o2
@@ -201,13 +206,28 @@ def delete_question(question_id,name):
     q=Questions.query.filter_by(id=question_id).first()
     db.session.delete(q)
     db.session.commit()
-    return redirect(url_for("quiz_management", msg="", name=name))
+    return redirect(url_for("quiz_management", msg="deleted successfuly", name=name))
 
 
 @app.route("/users/<name>" ,methods=["GET","POST"])
 def users(name):
-    users=Users.query.filter_by(role=1).first()
+    users=Users.query.filter_by(role=1).all()
     return render_template("users.html",name=name, users=users)
+
+
+@app.route("/block/<user_id>/<name>" ,methods=["GET","POST"])
+def block(name,user_id):
+    user=Users.query.filter_by(id=user_id).first()
+    user.status="Blocked"
+    db.session.commit()
+    return redirect(url_for("users",name=name,msg="user blocked successfully"))
+
+@app.route("/unblock/<user_id>/<name>" ,methods=["GET","POST"])
+def unblock(name,user_id):
+    user=Users.query.filter_by(id=user_id).first()
+    user.status="Active"
+    db.session.commit()
+    return redirect(url_for("users",name=name,msg="user blocked successfully"))
 
 
 @app.route("/user_dashboard/<id>/<name>" ,methods=["GET","POST"])
@@ -222,9 +242,10 @@ def start_quiz(id,name,quiz_id):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
     if datetime.now() < quiz.date:
         return "quiz is not started yet"
-    ques=Questions.query.filter_by(id=quiz_id).all()
+    ques=Questions.query.filter_by(Quiz_id=quiz_id).all()
     total=len(ques)
     scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
+    attempt=0
     if not scores:
         scores=Scores(user_id=id,Quiz_id=quiz_id,score=0,date=quiz.date)
         db.session.add(scores)
@@ -235,25 +256,42 @@ def start_quiz(id,name,quiz_id):
         ans=request.form.get("answer",type=int)
         print(ans)
         q_index=request.form.get("q_index",type=int)
+        action=request.form.get("action")
         question=Questions.query.filter_by(id=q_id).first()
         print(question.answer)
-        if ans==question.answer:
-            scores.score+=1
-            db.session.commit()
         next_index=q_index+1
-        if next_index>=total:
-            return redirect(url_for('view_score',quiz_id=quiz_id,id=id,name=name))
+        #if ans==int(question.answer):
+        #### else:
+        #next_index=0
+    #current_question=ques[next_index]
+        if action=="save":
+            if ans:
+                if ans==int(question.answer):
+                    scores.score+=10
+                    attempt+=1
+                    db.session.commit()
+                else:
+                    attempt+=1
+                    scores.score+=0
+                    db.session.commit()
+        if action=="submit" or next_index>=total:
+            return redirect(url_for('view_result', id=id,quiz_id=quiz_id,name=name))
+
     else:
-        next_index=0
+        next_index=0  
     current_question=ques[next_index]
+    quiz.status="Closed"
+    db.session.commit()
     return render_template("startquiz.html",name=name,id=id,quiz_id=quiz_id,question=current_question,q_index=next_index,total=total)
 
 
 @app.route("/view_quiz/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
-def view_score(id,name,quiz_id):
+def view_result(id,name,quiz_id):
+    quiz=Quizzes.query.filter_by(id=quiz_id).first()
     scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
+    correct=scores.score//10
     total_q=Questions.query.filter_by(Quiz_id=quiz_id).count()
-    return render_template("view_result.html",currect=scores.score,id=id,total=total_q,name=name)
+    return render_template("view_result.html",your_score=scores,id=id,total=total_q,name=name, quiz=quiz,correct=correct)
 
 @app.route("/view_quiz_d/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def view_quiz_details(id,quiz_id,name):
@@ -283,14 +321,14 @@ def admin_search(name):
     return redirect(url_for("admin_dashboard", name=name))
 
 
-@app.route("/user_search/<name>" ,methods=["GET","POST"])
-def user_search(name):
+@app.route("/user_search/<name>/<id>" ,methods=["GET","POST"])
+def user_search(name,id):
     if request.method=="POST":
         search_txt=request.form.get("admin_search")
         by_quiz=Quizzes.query.filter(Quizzes.title.ilike(f"%{search_txt}")).all()
         if by_quiz:
-            render_template("admin_dashboard.html",name=name,quizzes=by_quiz)
-    return redirect(url_for("user_dashboard", name=name))
+            render_template("user_dashboard.html",name=name,quizzes=by_quiz,id=id)
+    return redirect(url_for("user_dashboard", name=name,id=id))
 
 
 @app.route("/user_summary/<id>/<name>" ,methods=["GET","POST"])

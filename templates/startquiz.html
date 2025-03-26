@@ -1,8 +1,8 @@
 {%extends "user_layout.html"%}
 {%block content%}
-  <div class="my_form">
-    <h2>Question {{q_index+1}} of {{total}}</h2>
-    <p>{{question.title}}</p>
+  <div class="my_form2">
+    <h5 style="text-align: right;">total Ques. {{total}}</h5>
+    <p>Ques. {{q_index+1}}. {{question.question}}</p>
     <form action="{{ url_for('start_quiz', id=id, quiz_id=quiz_id,name=name) }}" method="POST">
       <input type="hidden" name="quiz_id" value="{{quiz_id}}">
       <input type="hidden" name="q_index" value="{{q_index}}">
@@ -11,11 +11,15 @@
 
 
 
-      <label><input type="radio" name="answer" value="1">{{question.option1}}</label><br>
-      <label><input type="radio" name="answer" value="2">{{question.option2}}</label><br>
-      <label><input type="radio" name="answer" value="3">{{question.option3}}</label><br>
-      <label><input type="radio" name="answer" value="4">{{question.option4}}</label><br>
-      <button type="submit">save and next</button>
+      1. <label><input type="radio" name="answer" value="1"> {{question.option1}}</label><br>
+      2. <label><input type="radio" name="answer" value="2"> {{question.option2}}</label><br>
+      3. <label><input type="radio" name="answer" value="3"> {{question.option3}}</label><br>
+      4. <label><input type="radio" name="answer" value="4"> {{question.option4}}</label><br>
+      <br>
+      <div>
+        <button type="submit" class="btn-outline-success" name="action" value="save" >save & next</button>
+        <button type="submit" name="action" class="btn-outline-danger" value="submit" style="margin-left: 40px;">submit</button>
+      </div>
     </form>
   </div>
 {%endblock%}

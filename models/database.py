@@ -1,3 +1,4 @@
+
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -14,6 +15,7 @@ class Users(db.Model):
     qualification=db.Column(db.String(100), nullable=False)
     dob=db.Column(db.Date, nullable=False)
     role=db.Column(db.Integer, default=1, nullable=False)
+    status=db.Column(db.String(100), default="Active",nullable=False)
     Score=db.relationship('Scores', backref='Users', cascade="all, delete-orphan")
 
 class Subjects(db.Model):
@@ -39,11 +41,13 @@ class Quizzes(db.Model):
     __tablename__="Quizzes"
 
     id=db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    title=db.Column(db.String(100), nullable=False)
     Chapter_id=db.Column(db.Integer, db.ForeignKey('Chapters.id',ondelete="CASCADE"))
-    score=db.Column(db.Integer, nullable=False)
+    total_score=db.Column(db.Integer, default=100, nullable=False)
     date=db.Column(db.DateTime, nullable=False)
-    time_duration=db.Column(db.Float, nullable=False)
+    time_duration=db.Column(db.String(11), nullable=False)
     remark=db.Column(db.String(100))
+    status=db.Column(db.String(100),default="Active", nullable=False)
     Question=db.relationship('Questions', backref="Quizzes", cascade="all, delete-orphan")
     Score=db.relationship('Scores', backref='Quizzes', cascade="all, delete-orphan")
 
@@ -60,7 +64,7 @@ class Questions(db.Model):
     option4=db.Column(db.String(100), nullable=False)
     answer=db.Column(db.String(100), nullable=False)
     Quiz_id=db.Column(db.Integer, db.ForeignKey('Quizzes.id', ondelete="CASCADE"), nullable=False)
-    marks=db.Column(db.Integer, default=1)
+    marks=db.Column(db.Integer, default=10,nullable=False)
 
 
 class Scores(db.Model):
@@ -69,9 +73,14 @@ class Scores(db.Model):
     id=db.Column(db.Integer, primary_key=True, autoincrement=True , unique=True)
     user_id=db.Column(db.Integer, db.ForeignKey('Users.id', ondelete="CASCADE"))
     Quiz_id=db.Column(db.Integer, db.ForeignKey('Quizzes.id', ondelete="CASCADE"))
+    question_id=db.Column(db.Integer, db.ForeignKey('Questions.id',ondelete="CASCADE"))
+    selected_ans=db.Column(db.Integer, default=0,nullable=False)
     time_taken=db.Column(db.Float)
+    q_attempt=db.Column(db.Integer)
     score=db.Column(db.Integer, nullable=False)
-    date=db.Column(db.DateTime, default=datetime.utcnow)
+    date=db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    is_score=db.Column(db.Boolean, default=False, nullable=False)
+
 
 
 

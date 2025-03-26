@@ -32,7 +32,7 @@
                       U00{{user.id}}
                     </div>
                     <div class="col">
-                      {{user.user_name}}
+                      {{user.email}}
                     </div>
                     <div class="col">
                        {{user.full_name}}
@@ -44,10 +44,20 @@
                         {{user.dob}}
                     </div>
                     <div class="col">
-                        active
+                      {%if user.status=="Active"%}
+                      <p style="background-color: green;font-size: small;">{{user.status}}</p>
+                      {%else%}
+                      <p style="background-color: red;">{{user.status}}</p>
+                      {%endif%}
                     </div>
                     <div class="col">
-                        <a href="*"></a>
+                      <form action="#" method="POST">
+                        {%if user.status=="Active"%}
+                        <a class="btn btn-danger" href="/block/{{user.id}}/{{name}}" role="button">Block</a>
+                        {%else%}
+                        <a class="btn btn-success" href="/unblock/{{user.id}}/{{name}}" role="button">UnBlock</a>
+                        {%endif%}
+                      </form>
                     </div>
                   </div>
                   {%endfor%}

@@ -1,11 +1,7 @@
 {%extends "admin_layout.html"%}
 {%block content%}
 <div class="my_form1">
-    <form action="/edit_question" method="POST">
-        <div class="mb-3">
-            <label for="title" class="form-label">title</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{q.title}}">
-        </div>
+    <form action="#" method="POST">
         <div class="mb-3">
             <label for="statement" class="form-label">question statement</label>
             <input type="text" class="form-control" id="statement" name="statement" value="{{q.question}}">
@@ -27,12 +23,12 @@
             <input type="text" class="form-control" id="o4" name="o4" value="{{q.option4}}">
         </div>
         <div class="mb-3">
-            <label for="newchapter" class="form-label">correct answer</label>
-            <input type="number" class="form-control" id="duration" name="ans" value="{{q.answer}}">
+            <label for="correct_answer" class="form-label">correct answer</label>
+            <input type="number" class="form-control" id="ans" name="ans" value="{{q.answer}}">
         </div>
-        </div>
-            <button type="submit" class="btn btn-success">Save and next</button>
-            <a class="btn btn-primary" href="/quiz_management/{{name}}" role="button">Cancel</a>
+        <div>
+            <button type="submit" class="btn btn-success">Save</button>
+            <a class="btn btn-danger" href="/quiz_management/{{name}}" role="button">Cancel</a>
         </div>
     </form>
 </div>

@@ -1,4 +1,4 @@
-{%extends "user_layout.html"%}
+{%extends "admin_layout.html"%}
 {%block content%}
                 <div class="my_form">
                 <div>
@@ -9,6 +9,6 @@
                   <h6>sheduled date : {{quiz.date }}</h6><br>
                   <h6>duration : {{quiz.time_duration  }} minutes</h6>
                 </div><br>
-                <a class="btn btn-danger" href="/user_dashboard/{{id}}/{{name}}" role="button">Close</a>
+                <a class="btn btn-danger" href="/quiz_management//{{name}}" role="button">Close</a>
                 </div>
 {%endblock%}

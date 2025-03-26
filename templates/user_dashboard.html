@@ -1,50 +1,101 @@
 {%extends "user_layout.html"%}
 {%block content%}
-<div class="small_container">
-  <div class="container text-center">
-    <div class="row">
-      <div class="col">
-        ID
-      </div>
-      <div class="col">
-        No.fo questions
-      </div>
-      <div class="col">
-        date
-      </div>
-      <div class="col">
-        duration
-      </div>
-      <div class="col">
-        action
-      </div>
-    </div>
-    {%if quizzes%}
-    {%for q in quizzes%}
-    <div class="row">
-      <div class="col">
-        {{q.id}}
-      </div>
-      <div class="col">
-        {{q.Question | length}}
-      </div>
-      <div class="col">
-        {{q.date}}
-      </div>
-      <div class="col">
-        {{q.time_duration}}
-      </div>
-      <div class="col">
-        <a class="btn btn-success" href="/start_quiz/{{id}}/{{name}}/{{q.id}}" role="button">Start</a>
-        <a class="btn btn-primary" href="/view_quiz_d/{{id}}/{{name}}/{{q.id}}" role="button">view</a>     
-      </div>
-    </div>
-    {%endfor%}
-    {%else%}
-    <div>
-      <h5>No Quiz avaliable</h5>
-    </div>
-    {%endif%}
-  </div>
-</div>
+            {%if quizzes%}
+            {%for q in quizzes%}
+            <div>
+              {%if q.status=="Active"%}
+              <div class="small_form">
+                <h4 class="center">upcoming quizzes</h4>
+                <div class="container text-center">
+                  <div class="row">
+                    <div class="col">
+                      ID
+                    </div>
+                    <div class="col">
+                      No.fo questions
+                    </div>
+                    <div class="col">
+                      date
+                    </div>
+                    <div class="col">
+                      duration
+                    </div>
+                    <div class="col">
+                      action
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      {{q.id}}
+                    </div>
+                    <div class="col">
+                      {{q.Question | length}}
+                    </div>
+                    <div class="col">
+                      {{q.date}}
+                    </div>
+                    <div class="col">
+                      {{q.time_duration}}
+                    </div>
+                    <div class="col">
+                      <a class="btn btn-success" href="/start_quiz/{{id}}/{{name}}/{{q.id}}" role="button">Start</a>
+                      <a class="btn btn-primary" href="/view_quiz_d/{{id}}/{{name}}/{{q.id}}" role="button">view</a>     
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br><br><br>
+              {%elif q.status=="Closed"%}
+              <div class="small_form">
+                <h4 class="center">closed quizzes </h4>
+                <div class="container text-center">
+                  <div class="row">
+                    <div class="col">
+                      ID
+                    </div>
+                    <div class="col">
+                      No.fo questions
+                    </div>
+                    <div class="col">
+                      date
+                    </div>
+                    <div class="col">
+                      duration
+                    </div>
+                    <div class="col">
+                      action
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      {{q.id}}
+                    </div>
+                    <div class="col">
+                      {{q.Question | length}}
+                    </div>
+                    <div class="col">
+                      {{q.date}}
+                    </div>
+                    <div class="col">
+                      {{q.time_duration}}
+                    </div>
+                    <div class="col">
+                      <a class="btn btn-success" href="/start_quiz/{{id}}/{{name}}/{{q.id}}" role="button">Start</a>
+                      <a class="btn btn-primary" href="/view_quiz_d/{{id}}/{{name}}/{{q.id}}" role="button">view</a>     
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {%else%}
+              <div class="center">
+                <h4>there is error in quizzes</h4>
+              </div>
+              {%endif%}
+            </div>
+            {%endfor%}
+            {%else%}
+              <div class="center">
+                <h5>No Quiz avaliable</h5>
+              </div>
+            {%endif%}
 {%endblock%}
