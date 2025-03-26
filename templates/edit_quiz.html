@@ -1,18 +1,18 @@
 {%extends "admin_layout.html"%}
 {%block content%}
 <div class="my_form">
-  <form action="quiz_management" method="POST">
+  <form action="#" method="POST">
       <div class="mb-3">
           <label for="newchapter" class="form-label">Total Score</label>
-          <input type="number" class="form-control" id="total_score" name="total_score" value="{{quiz.score}}">
+          <input type="number" class="form-control" id="total_score" name="total_score" value="{{q.total_score}}">
       </div>
       <div class="mb-3">
           <label for="newchapter" class="form-label">Date and Time</label>
-          <input type="datetime-local" min="2025-01-01T00:00" class="form-control" id="datetime" name="datetime" value="{{quiz.date}}" >
+          <input type="datetime-local" min="2025-01-01T00:00" class="form-control" id="datetime" name="datetime" value="{{q.date}}" >
       </div>
       <div class="mb-3">
           <label for="newchapter" class="form-label"> Time duration</label>
-          <input type="duration" class="form-control" id="duration" name="duration" value="{{quiz.time_duration}}">
+          <input type="duration" class="form-control" id="duration" name="duration" value="{{q.time_duration}}">
       </div>
       <div>
           <button type="submit" class="btn btn-success">SAVE</button>

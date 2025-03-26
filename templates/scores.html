@@ -1,6 +1,7 @@
 {%extends "user_layout.html"%}
 {%block content%}
   <div class="small_form">
+    <h4 class="center"> Quiz scores</h4>
     <div class="container text-center">
       <div class="row">
         <div class="col">
@@ -20,16 +21,16 @@
       {%for s in scores%}
       <div class="row">
         <div class="col">
-          {{s.id}}
+          Q00{{s.Quiz_id}}
         </div>
         <div class="col">
-          {{ s.Question | length }}
+          {{ s.Quizzes.Question | length }}
         </div>
         <div class="col">
           {{s.date}}
         </div>
         <div class="col">
-         {{s.score}}
+         {{s.score}}/{{(s.Quizzes.Question|length)*10}}
         </div>
       </div>
       {%endfor%}

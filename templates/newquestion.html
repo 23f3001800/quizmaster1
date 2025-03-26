@@ -1,11 +1,11 @@
 {%extends "admin_layout.html"%}
 {%block content%}
 <div class="my_form1">
-    <h4>ad question {{q_count}}</h4>
+    <h4>add question no. {{q_count+1}}</h4>
     <form action="#" method="POST">
         <div class="mb-3">
             <label for="title" class="form-label">title</label>
-            <input type="text" class="form-control" id="title" name="title" >
+            <input type="text" class="form-control" id="title" name="title" value="single correct question">
         </div>
         <div class="mb-3">
             <label for="statement" class="form-label">question statement</label>
@@ -31,11 +31,10 @@
             <label for="newchapter" class="form-label">correct answer</label>
             <input type="number" class="form-control" id="duration" name="ans" >
         </div>
-        </div>
+        <div>
             <button type="submit" class="btn btn-success">Save and next</button>
-            <a class="btn btn-primary" href="/admin_dashboard/{{name}}" role="button">Cancel</a>
+            <a class="btn btn-danger" href="/quiz_management/{{name}}" role="button">Cancel</a>
         </div>
     </form>
-    <h4>{{msg}}</h4>
 </div>
 {%endblock%}

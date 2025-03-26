@@ -1,8 +1,16 @@
 {%extends "user_layout.html"%}
 {%block content%}
-                <div class="my_form">
-                  <h4>quiz completed</h4>
-                  <p>you {{correct}} out of total{{total}} and your score {{correct}}</p>
-                  <a class="btn btn-danger" href="/user_dashboard/{{id}}/{{name}}" role="button">Close</a>
-                </div>
+<div class="my_form2">
+  <div class="center">
+    <h4>result summary of quiz {{quiz.title}}</h4>
+    <div><br>
+      <h5>total No. of questions {{total}}</h5><br>
+      <h5> total No. of questions attempted {{your_score.q_attempt}}</h5><br>
+      <h5>total No. of questions correctly answered {{correct}}</h5><br>
+    </div>
+    <div>
+      <h3>your total score  {{your_score.score}}/{{total*10}}</h3>
+    </div>
+  </div>
+</div>
 {%endblock%}

@@ -8,25 +8,35 @@
 .panel{
     width: 90%;
     margin: auto;
-    height: 700px;
-    height: auto;
+    height: 650px;
     margin: 10px;
+    margin-left: 30px;
     border: 1px solid black;
     
 }
 
 .my_form{
     border: 1px solid black;
-    width: 400;
+    width: 310px;
     height: auto;
     margin: 10px;
     margin-top: 20px;
     padding: 10px;
-    margin-left: 260px;
+    margin-left: 530px;
     border-radius: 10px;
     text-align: justify;
 }
 
+.my_form2{
+    border: 1px solid black;
+    width: 500px;
+    height: 400px;
+    margin: 10px;
+    margin-top: 50px;
+    padding: 10px;
+    margin-left: 530px;
+    border-radius: 10px
+}
 .my_form1{
     border: 1px solid black;
     width: 500px;
@@ -96,4 +106,5 @@
 .center{
     text-align: center;
     font: 1em sans-serif;
+    margin-top: 10px;
 }
