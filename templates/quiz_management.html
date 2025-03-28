@@ -3,7 +3,7 @@
             {%if quizzes%}
             {%for quiz in quizzes%}
               <div class="small_form">
-                <a href="view_quiz_detail/{{name}}/{{quiz.id}}"><h4 class="center">quiz({{quiz.Chapters.name}})<p>({{quiz.title}})</p></h4></a>
+                <a href="/view_quiz_details/{{name}}/{{quiz.id}}"><h4 class="center">quiz({{quiz.Chapters.name}})<p>({{quiz.title}})</p></h4></a>
                 <div style="text-align: right;">
                   <a class="btn btn-success" href="/edit_quiz/{{quiz.id}}/{{name}}" role="button">edit</a>
                   <a class="btn btn-danger" href="/quiz/{{quiz.id}}/{{name}}/delete" role="button">delete</a>

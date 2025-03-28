@@ -19,3 +19,9 @@ class SubjectApi(Resource):
 
     def put_subject(self,id):
         subjects=Subjects.query.filter_by(id=id).first()
+
+
+class ChapterApi(Resource):
+    def get_chapter(self):
+        chapters=Chapters.query.all()
+        return jsonify(chapters)

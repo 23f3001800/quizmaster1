@@ -1,7 +1,7 @@
 from flask import Flask, render_template,url_for, redirect,request
 from flask import current_app as app
 from models.database import db, Users, Subjects,Chapters, Questions, Quizzes, Scores
-from datetime import datetime
+from datetime import datetime,timedelta
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -135,7 +135,7 @@ def new_quiz(name):
         return redirect(url_for("quiz_management", name=name, msg="quiz added"))
     return render_template("newquiz.html",chapter=chapter, name=name, msg="")
 
-app.route("/view_quiz_detail/<name>/<quiz_id>" ,methods=["GET","POST"])
+@app.route("/view_quiz_details/<name>/<quiz_id>" ,methods=["GET","POST"])
 def admin_quiz_details(quiz_id,name):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
     return render_template("adminview_quiz_d.html",quiz=quiz,name=name)
@@ -242,10 +242,12 @@ def start_quiz(id,name,quiz_id):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
     if datetime.now() < quiz.date:
         return "quiz is not started yet"
+    if datetime.now() - quiz.date > timedelta(hours=24):
+        quiz.status="Closed"
+        db.session.commit()
     ques=Questions.query.filter_by(Quiz_id=quiz_id).all()
     total=len(ques)
     scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
-    attempt=0
     if not scores:
         scores=Scores(user_id=id,Quiz_id=quiz_id,score=0,date=quiz.date)
         db.session.add(scores)
@@ -260,32 +262,27 @@ def start_quiz(id,name,quiz_id):
         question=Questions.query.filter_by(id=q_id).first()
         print(question.answer)
         next_index=q_index+1
-        #if ans==int(question.answer):
-        #### else:
-        #next_index=0
-    #current_question=ques[next_index]
         if action=="save":
             if ans:
                 if ans==int(question.answer):
                     scores.score+=10
-                    attempt+=1
+                    scores.q_attempt+=1
                     db.session.commit()
                 else:
-                    attempt+=1
+                    scores.q_attempt+=1
                     scores.score+=0
                     db.session.commit()
         if action=="submit" or next_index>=total:
             return redirect(url_for('view_result', id=id,quiz_id=quiz_id,name=name))
-
     else:
         next_index=0  
     current_question=ques[next_index]
-    quiz.status="Closed"
+    scores.is_score=False
     db.session.commit()
     return render_template("startquiz.html",name=name,id=id,quiz_id=quiz_id,question=current_question,q_index=next_index,total=total)
 
 
-@app.route("/view_quiz/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
+@app.route("/view_result/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def view_result(id,name,quiz_id):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
     scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
@@ -293,10 +290,12 @@ def view_result(id,name,quiz_id):
     total_q=Questions.query.filter_by(Quiz_id=quiz_id).count()
     return render_template("view_result.html",your_score=scores,id=id,total=total_q,name=name, quiz=quiz,correct=correct)
 
+
 @app.route("/view_quiz_d/<id>/<name>/<quiz_id>" ,methods=["GET","POST"])
 def view_quiz_details(id,quiz_id,name):
     quiz=Quizzes.query.filter_by(id=quiz_id).first()
     return render_template("view_quiz_details.html",quiz=quiz,name=name,id=id)
+
 
 @app.route("/user_score/<id>/<name>" ,methods=["GET","POST"])
 def scores(id,name):
