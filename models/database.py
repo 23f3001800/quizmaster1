@@ -73,8 +73,6 @@ class Scores(db.Model):
     id=db.Column(db.Integer, primary_key=True, autoincrement=True , unique=True)
     user_id=db.Column(db.Integer, db.ForeignKey('Users.id', ondelete="CASCADE"))
     Quiz_id=db.Column(db.Integer, db.ForeignKey('Quizzes.id', ondelete="CASCADE"))
-    question_id=db.Column(db.Integer, db.ForeignKey('Questions.id',ondelete="CASCADE"))
-    selected_ans=db.Column(db.Integer, default=0,nullable=False)
     time_taken=db.Column(db.Float)
     q_attempt=db.Column(db.Integer)
     score=db.Column(db.Integer, nullable=False)

@@ -1,0 +1,28 @@
+#to create database
+python
+>>> from app import *
+>>> db.create_all()
+
+#create record:
+from app import *
+from datetime import datetime
+user1 = Users(full_name="Admin",email = "admin@gmail.com",password="12345", qualification="12th",dob= datetime.strptime('2024-01-01', '%Y-%m-%d').date(),role=0)     
+db.session.add(user1)
+db.session.commit()
+
+#update record:
+user = User.query.filter_by(email=user_email).first()
+user.full_name = "Rahul"
+user.email = "rahul@user.com"
+db.session.commit()
+
+#delete record:
+user = User.query.get(3)
+db.session.delete(user)
+db.session.commit()
+
+#reading data:
+>>> users = User.query.all()
+
+
+#to exit shell> exit()
