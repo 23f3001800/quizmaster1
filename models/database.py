@@ -74,7 +74,7 @@ class Scores(db.Model):
     user_id=db.Column(db.Integer, db.ForeignKey('Users.id', ondelete="CASCADE"))
     Quiz_id=db.Column(db.Integer, db.ForeignKey('Quizzes.id', ondelete="CASCADE"))
     time_taken=db.Column(db.Float)
-    q_attempt=db.Column(db.Integer)
+    q_attempt=db.Column(db.Integer,default=0,nullable=False)
     score=db.Column(db.Integer, nullable=False)
     date=db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     is_score=db.Column(db.Boolean, default=False, nullable=False)

@@ -245,14 +245,20 @@ def start_quiz(id,name,quiz_id):
     if datetime.now() - quiz.date > timedelta(hours=24):
         quiz.status="Closed"
         db.session.commit()
+    scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
     ques=Questions.query.filter_by(Quiz_id=quiz_id).all()
     total=len(ques)
-    scores=Scores.query.filter_by(user_id=id,Quiz_id=quiz_id).first()
     if not scores:
-        scores=Scores(user_id=id,Quiz_id=quiz_id,score=0,date=quiz.date)
+        scores=Scores(user_id=id,Quiz_id=quiz_id,q_attempt=0,score=0, date=quiz.date)
         db.session.add(scores)
         db.session.commit()
-
+    print(scores)
+    #if scores.q_attempt is None:
+        #scores.q_attempt = 0 
+    #if scores.is_score is None:
+        #scores.is_score = True
+    if scores.is_score:
+        return 'you already attempted this quiz please check your score menu'
     if request.method=="POST":
         q_id=request.form.get("q_id",type=int)
         ans=request.form.get("answer",type=int)
@@ -269,16 +275,18 @@ def start_quiz(id,name,quiz_id):
                     scores.q_attempt+=1
                     db.session.commit()
                 else:
-                    scores.q_attempt+=1
                     scores.score+=0
+                    scores.q_attempt+=1
                     db.session.commit()
+        
         if action=="submit" or next_index>=total:
+            scores.is_score=True
+            db.session.commit()
             return redirect(url_for('view_result', id=id,quiz_id=quiz_id,name=name))
     else:
         next_index=0  
     current_question=ques[next_index]
-    scores.is_score=False
-    db.session.commit()
+    
     return render_template("startquiz.html",name=name,id=id,quiz_id=quiz_id,question=current_question,q_index=next_index,total=total)
 
 
@@ -394,8 +402,9 @@ def get_pie_plt():
     join Scores on Quizzes.id=Scores.Quiz_id
     join Users on Scores.user_id=Users.id
     group by Subjects.name                          
-    """),{"user_id":id}).fetchall()
+    """)).fetchall()
     l=dict(results)
+    plt.title('subject wise user attempts ')
     x_label=list(l.keys())
     y_label=list(l.values())
     plt.pie(y_label, labels=x_label)
@@ -412,6 +421,7 @@ def get_u_pie_plt(user_id):
     group by Subjects.name                          
     """),{"user_id":user_id}).fetchall()
     l=dict(results)
+    plt.title('month wise quizzes attempted')
     x_label=list(l.keys())
     y_label=list(l.values())
     plt.pie(y_label, labels=x_label)
