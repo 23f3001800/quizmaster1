@@ -1,0 +1,13 @@
+<span id="contact-link">Contact Me</span>
+
+<script>
+  // Delay slightly to foil very basic scrapers
+  window.onload = function() {
+    const user = "yourusername";
+    const domain = "gmail.com";
+    const element = document.getElementById('contact-link');
+    
+    // Create the clickable link
+    element.innerHTML = `<a href="mailto:${user}@${domain}">${user}@${domain}</a>`;
+  };
+</script>
