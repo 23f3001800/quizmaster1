@@ -1,0 +1,19 @@
+# --- Core Framework (The Controller & View Engine) ---
+Flask==3.0.2
+
+# --- Database & Models (The Model) ---
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+
+# --- Forms & User Input (View Helpers) ---
+Flask-WTF==1.2.1
+email-validator==2.1.1
+
+# --- Configuration & Environment ---
+python-dotenv==1.0.1
+
+# --- Production Server & Deployment ---
+gunicorn==21.2.0
+
+# --- Testing (For your GitHub Actions) ---
+pytest==8.0.0
