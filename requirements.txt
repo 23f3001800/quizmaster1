@@ -7,7 +7,7 @@ Flask-Migrate==4.0.5
 
 # --- Forms & User Input (View Helpers) ---
 Flask-WTF==1.2.1
-email-validator==2.1.1
+email-validator==2.3.0
 
 # --- Configuration & Environment ---
 python-dotenv==1.0.1
