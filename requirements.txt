@@ -13,7 +13,7 @@ email-validator==2.3.0
 python-dotenv==1.0.1
 
 # --- Production Server & Deployment ---
-gunicorn==21.2.0
+gunicorn==25.1.0
 
 # --- Testing (For your GitHub Actions) ---
 pytest==9.0.2
