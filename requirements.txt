@@ -3,7 +3,7 @@ Flask==3.0.2
 
 # --- Database & Models (The Model) ---
 Flask-SQLAlchemy==3.1.1
-Flask-Migrate==4.0.5
+Flask-Migrate==4.1.0
 
 # --- Forms & User Input (View Helpers) ---
 Flask-WTF==1.2.1
