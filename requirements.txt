@@ -10,7 +10,7 @@ Flask-WTF==1.2.1
 email-validator==2.3.0
 
 # --- Configuration & Environment ---
-python-dotenv==1.0.1
+python-dotenv==1.2.2
 
 # --- Production Server & Deployment ---
 gunicorn==25.1.0
