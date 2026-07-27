@@ -6,7 +6,7 @@ Flask-SQLAlchemy==3.1.1
 Flask-Migrate==4.1.0
 
 # --- Forms & User Input (View Helpers) ---
-Flask-WTF==1.2.1
+Flask-WTF==1.3.0
 email-validator==2.3.0
 
 # --- Configuration & Environment ---
