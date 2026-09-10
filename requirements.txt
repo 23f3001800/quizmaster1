@@ -16,4 +16,4 @@ python-dotenv==1.0.1
 gunicorn==25.1.0
 
 # --- Testing (For your GitHub Actions) ---
-pytest==9.0.2
+pytest==9.1.1
